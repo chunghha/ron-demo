@@ -1,3 +1,4 @@
+use anyhow::Result;
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::Serialize;
 use std::{collections::HashMap, iter::FromIterator};
@@ -26,7 +27,11 @@ struct Nested {
   b: char,
 }
 
-fn main() {
+fn get_pretty_config() -> PrettyConfig {
+  PrettyConfig::new().with_depth_limit(2).with_separate_tuple_members(true).with_enumerate_arrays(true)
+}
+
+fn main() -> Result<()> {
   let data = Config {
     float: (2.18, -1.1),
     tuple: TupleStruct((), false),
@@ -36,8 +41,7 @@ fn main() {
     array: vec![(); 3],
   };
 
-  let pretty = PrettyConfig::new().with_depth_limit(2).with_separate_tuple_members(true).with_enumerate_arrays(true);
-  let s = to_string_pretty(&data, pretty).expect("Serialization failed");
+  println!("{}", to_string_pretty(&data, get_pretty_config())?);
 
-  println!("{}", s);
+  Ok(())
 }
