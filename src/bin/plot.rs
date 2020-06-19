@@ -8,14 +8,23 @@ use plotlib::repr::Plot;
 use plotlib::style::{PointMarker, PointStyle};
 use plotlib::view::ContinuousView;
 
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+#[structopt(name = "plot", about = "plot cmd option")]
+struct Opt {
+  /// File name
+  #[structopt(short, long = "file", default_value("plot.svg"))]
+  file_name: String,
+}
+
 #[derive(Debug, Deserialize)]
 struct Config {
   plot_color_1: String,
   plot_color_2: String,
-  plot_file_name: String,
 }
 
-fn plot(config: Config) {
+fn plot(config: Config, opt: Opt) {
   let data1 = vec![(-3.0, 2.3), (-1.6, 5.3), (0.3, 0.7), (4.3, -1.4), (6.4, 4.3), (8.5, 3.7)];
 
   let s1: Plot =
@@ -32,7 +41,7 @@ fn plot(config: Config) {
     .x_label("Some varying variable")
     .y_label("The response of something");
 
-  Page::single(&v).save(config.plot_file_name).unwrap();
+  Page::single(&v).save(opt.file_name).unwrap();
 }
 
 fn get_config() -> Result<Config> {
@@ -45,7 +54,8 @@ fn get_config() -> Result<Config> {
 
 fn main() -> Result<()> {
   better_panic::install();
-  plot(get_config()?);
+  let opt = Opt::from_args();
+  plot(get_config()?, opt);
 
   Ok(())
 }

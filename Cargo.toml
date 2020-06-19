@@ -12,6 +12,7 @@ better-panic = "0.2"
 plotlib = "0.5"
 ron = "0.6"
 serde = "1.0"
+structopt = "0.3"
 
 [[bin]]
 name = "decode"
