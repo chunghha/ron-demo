@@ -1,3 +1,6 @@
+extern crate pretty_env_logger;
+#[macro_use] extern crate log;
+
 use anyhow::Result;
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::Serialize;
@@ -32,6 +35,9 @@ fn get_pretty_config() -> PrettyConfig {
 }
 
 fn main() -> Result<()> {
+  better_panic::install();
+  pretty_env_logger::init();
+
   let data = Config {
     float: (2.18, -1.1),
     tuple: TupleStruct((), false),
@@ -41,7 +47,7 @@ fn main() -> Result<()> {
     array: vec![(); 3],
   };
 
-  println!("{}", to_string_pretty(&data, get_pretty_config())?);
+  info!("{}", to_string_pretty(&data, get_pretty_config())?);
 
   Ok(())
 }

@@ -54,6 +54,7 @@ fn get_config() -> Result<Config> {
 
 fn main() -> Result<()> {
   better_panic::install();
+
   let opt = Opt::from_args();
   plot(get_config()?, opt);
 

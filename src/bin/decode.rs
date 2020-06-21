@@ -1,3 +1,6 @@
+extern crate pretty_env_logger;
+#[macro_use] extern crate log;
+
 use anyhow::Result;
 use ron::de::from_reader;
 use serde::Deserialize;
@@ -26,7 +29,11 @@ fn get_config() -> Result<Config> {
   Ok(config)
 }
 
-fn main() {
+fn main() -> Result<()>{
   better_panic::install();
-  println!("Config: {:#?}", &get_config());
+  pretty_env_logger::init();
+
+  info!("Config: {:#?}", &get_config());
+
+  Ok(())
 }
